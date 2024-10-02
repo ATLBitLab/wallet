@@ -1,16 +1,18 @@
 "use client";
 
 import { FedimintWallet } from "@fedimint/core-web";
+import { useEffect, useState } from "react";
 
 
 export default function Home() {
-  async function myFedimintWallet(){
-    console.log('myFedimintWallet()')
+
+  async function launchWallet(){
+    console.log('starting wallet')
 
     // Create the Wallet client
     const wallet = new FedimintWallet()
 
-    globalThis.wallet = wallet
+    // globalThis.wallet = wallet
 
     // Open the wallet (should be called once in the application lifecycle)
     await wallet.open()
@@ -22,7 +24,7 @@ export default function Home() {
     }
 
     // Get Wallet Balance
-    const balance = await wallet.balance.getBalance()
+    await wallet.balance.getBalance()
 
     // Subscribe to Balance Updates
     const unsubscribe = wallet.balance.subscribeBalance((balance: number) => {
@@ -37,10 +39,10 @@ export default function Home() {
 
     
 
-    let spend = await wallet.mint.spendNotes(100)
+    const spend = await wallet.mint.spendNotes(100)
     console.log(spend)
 
-    let RedeemMyFuckingNotes = await wallet.mint.redeemEcash(spend.notes)
+    await wallet.mint.redeemEcash(spend.notes)
 
 
 
@@ -54,15 +56,18 @@ export default function Home() {
     // Pay Lightning Invoice
     // await wallet.lightning.payBolt11Invoice('lnbc...')
 
+    unsubscribe();
     
   }
 
-  myFedimintWallet();
-
+  useEffect(()=>{
+      launchWallet();
+  }, []);
+  
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
       <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        Test 1
+        <h1>ATL BitLab Wallet</h1>
       </main>
     </div>
   );
