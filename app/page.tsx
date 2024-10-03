@@ -41,10 +41,9 @@ export default function Home() {
       console.log('Updated balance:', balance)
       setBalance(balance);
     })
-    // Remember to call unsubscribe() when done
 
-    unsubscribe();
-    
+    // Remember to call unsubscribe() when done
+    // unsubscribe(); 
   }
 
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
