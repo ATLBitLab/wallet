@@ -1,12 +1,12 @@
 "use client";
 
 import { FedimintWallet } from "@fedimint/core-web";
-import { ChangeEventHandler, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 
 export default function Home() {
   const [balance, setBalance] = useState(0);
-  const [federationInvite, setFederationInvite] = useState('fed11qgqzc2nhwden5te0vejkg6tdd9h8gepwvejkg6tdd9h8garhduhx6at5d9h8jmn9wshxxmmd9uqqzgxg6s3evnr6m9zdxr6hxkdkukexpcs3mn7mj3g5pc5dfh63l4tj6g9zk4er');
+  const [federationInvite] = useState('fed11qgqzc2nhwden5te0vejkg6tdd9h8gepwvejkg6tdd9h8garhduhx6at5d9h8jmn9wshxxmmd9uqqzgxg6s3evnr6m9zdxr6hxkdkukexpcs3mn7mj3g5pc5dfh63l4tj6g9zk4er');
   const [sendAmount, setSendAmount] = useState(100);
   const [receiveAmount, setReceiveAmount] = useState(200);
   const [invoiceToPay, setInvoiceToPay] = useState<string>('')
@@ -37,13 +37,10 @@ export default function Home() {
     await wallet.balance.getBalance()
 
     // Subscribe to Balance Updates
-    const unsubscribe = wallet.balance.subscribeBalance((balance: number) => {
+    wallet.balance.subscribeBalance((balance: number) => {
       console.log('Updated balance:', balance)
       setBalance(balance);
     })
-
-    // Remember to call unsubscribe() when done
-    // unsubscribe(); 
   }
 
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -73,7 +70,7 @@ export default function Home() {
     }
     else {
       console.log('make an ecash payment');
-      let notes = await wallet?.mint.spendNotes(sendAmount);
+      const notes = await wallet?.mint.spendNotes(sendAmount);
       setNotesToSend(notes?.notes);
     }
   }
@@ -81,13 +78,13 @@ export default function Home() {
   const handleReceivePayment = async () => {
     if(notesToReceive !== undefined) {
       console.log('receive an ecash payment');
-      let notes = await wallet?.mint.redeemEcash(notesToReceive);
+      const notes = await wallet?.mint.redeemEcash(notesToReceive);
       console.log(notes);
     }
   }
 
   const handleGetInvoice = async () => {
-    let invoice = await wallet?.lightning.createInvoice(receiveAmount, "payment");
+    const invoice = await wallet?.lightning.createInvoice(receiveAmount, "payment");
     setInvoiceForReceive(invoice?.invoice);
   }
 
