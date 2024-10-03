@@ -23,7 +23,7 @@ export default function Home() {
     setWallet(wallet);
 
     // Uncomment to access the Wallet client from javascript console
-    globalThis.wallet = wallet
+    // globalThis.wallet = wallet
 
     // Open the wallet (should be called once in the application lifecycle)
     await wallet.open()
